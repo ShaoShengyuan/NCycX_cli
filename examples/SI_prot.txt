@@ -1,0 +1,4 @@
+GCA_000091165.1_ASM9116v1_protein	3072
+nirk_rere_3	3
+GCA_000008085.1_genomic	583
+GCF_900170025.1_NSND_Contig_protein	4023
