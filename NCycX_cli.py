@@ -76,6 +76,8 @@ def extract_fasta_for_hmm(config):
     sample_files = glob.glob(os.path.join(workdir, f"*{filetype}"))
     if not sample_files:
         sys.exit(f"[Error] No sequencing files with format {filetype} found in {workdir}.")
+    if filetype.endswith('.gz') or filetype.startswith('fastq') or filetype.startswith('fq'):
+        sys.exit("\n[Error] The --hmm-filter pipeline currently ONLY supports uncompressed FASTA files (.fasta, .faa, .fa). Please decompress or convert your input files before using the HMM filter.")
 
     gene_file_handles = {}
     extracted_count = 0
@@ -186,7 +188,7 @@ def hmm_filter_and_recalc(config, hmm_result_dir, seq_to_gene):
     
     # 1. 采用你的逻辑加载字典
     print("Loading reference Domain dictionary...")
-    all_high_freq = pd.read_csv(tsv_path, sep='\t', usecols=range(5))
+    all_high_freq = pd.read_csv(tsv_path, sep='\t')
     gene_to_accessions = dict()
     for gene_type, group in all_high_freq.groupby('gene_type'):
         gene_to_accessions[gene_type] = group['accession'].tolist()
@@ -218,9 +220,11 @@ def hmm_filter_and_recalc(config, hmm_result_dir, seq_to_gene):
         except Exception as e:
             # 如果文件为空或者读取失败，安静跳过
             continue
+        # 脱除版本号 (例如 PF00001.21 变成 PF00001)，增强匹配鲁棒性
+        col1_clean = domain_tbl[1].astype(str).str.split('.').str[0]
             
-        # 4. 核心过滤：完全复用你的精准匹配逻辑
-        filtered_rows = domain_tbl[domain_tbl[1].isin(reference_accessions)]
+        # 4. 核心过滤：基于清理后的 Accession 列进行精准匹配 
+        filtered_rows = domain_tbl[col1_clean.isin(reference_accessions)]
         unique_sequences = set(filtered_rows[2].tolist())
         
         # 将通过筛选的序列存入总集合

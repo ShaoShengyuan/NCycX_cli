@@ -110,7 +110,6 @@ elsif ( $method eq "usearch" ) {
     my $id = $config{USEARCH_ID};
     my $db_faa = $config{DB_FAA};
     system("$usearch -usearch_global $file -db $db_faa -id $id -blast6out $out");
-    system("cp $out ./");
   }
 }
 elsif ( $method eq "blast" ) {
@@ -144,11 +143,6 @@ elsif ( $method eq "blast" ) {
       if $seqtype eq "prot";
     system("$blastx -db $db_faa -query $file -out $out -outfmt 6 -evalue $evalue -max_target_seqs $max_target")
       if $seqtype eq "nucl";
-      
-    my $result = system("cp $out ./");
-    if ($result != 0) {
-        print "cp failed: $!\n";
-    }
   }
 }
 
@@ -279,19 +273,9 @@ sub RandomSampling {
 
 sub PrintHelp {
   print "="x50 . "\n";
-  print "Usage:\n";
-  print "  perl Ngenes_2604_full.PL -c <config_file>\n\n";
-  print "Description:\n";
-  print "  All parameters should be set within the configuration file (.ctl).\n";
-  print "  However, you can use the following options to temporarily override \n";
-  print "  the configuration file settings:\n\n";
-  print "Options for temporary override:\n";
-  print "  -d  Directory for sequence files\n";
-  print "  -m  Method: diamond, usearch, or blast\n";
-  print "  -f  File extension (e.g., fasta, fastq)\n";
-  print "  -s  Sequence type: nucl or prot\n";
-  print "  -si Path to sample info file\n";
-  print "  -rs Random sampling size (Set 0 to skip sampling)\n";
-  print "  -o  Output file name\n";
+  print "Usage: perl Ngenes_2606.PL -c <config_file>\n\n";
+  print "Note: This is the backend Perl engine for the NCycX pipeline.\n";
+  print "Please run the pipeline using the Python wrapper (NCycX_cli.py) \n";
+  print "which provides full support for HMM filtering and parameter overrides.\n";
   print "="x50 . "\n";
 }

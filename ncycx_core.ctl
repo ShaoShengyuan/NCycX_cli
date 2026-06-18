@@ -3,33 +3,27 @@
 # ==========================================
 
 # Directory containing your sequence files (e.g., ./data)
-# 指定存放输入序列文件的文件夹路径
 WORKDIR=/home/shaosy/264NDB/NCycX/examples/faa
 
 # Path to the tab-delimited file containing sample names and sequence numbers
-# 包含样本名和序列数量的制表符分隔文件
 SAMPLEINFO=/home/shaosy/264NDB/NCycX/examples/SI_prot.txt
 
 # Path to the output functional profile result file
-# 最终生成的丰度结果表路径
 OUTFILE=./abundance.out
 
 # Alignment method to use. Options: diamond, usearch, blast. (Default: diamond)
-# 使用的比对软件，默认 diamond
 METHOD=diamond
 
 # File extension of your sequence files. 
 # Options: fastq, fastq.gz, fasta, fasta.gz, fq, fq.gz, fa, fa.gz, faa, faa.gz
-# 输入文件的后缀类型
 FILETYPE=faa
 
 # Sequence type of your input files. Options: prot (protein), nucl (nucleotide)
-# 输入序列的类型：prot(蛋白质) 或 nucl(核酸)
 SEQTYPE=prot
 
 # Random sampling size (integer). 
-# 设为 0，表示跳过抽平，输出最真实的绝对序列计数 (Absolute Counts)
-# 如果留空，则依旧会自动寻找最小样本数进行抽平
+# Set to 0 to skip smoothing and output the most accurate absolute sequence counts (Absolute Counts)
+# If left blank, the system will still automatically determine the minimum sample size for smoothing 
 RANDOMSAMPLING=0
 
 # ==========================================
@@ -71,3 +65,18 @@ USEARCH_ID=0.3
 # BLAST+ settings
 BLAST_EVALUE=1e-4
 BLAST_MAX_TARGET_SEQS=1
+
+# ==========================================
+# HMM Filter Settings (HMM 精筛参数)
+# ==========================================
+# hmmscan executable path
+HMMSCAN_PATH=~/miniconda3/envs/ngenesdb/bin/hmmscan
+
+# Reference HMM database path (must be hmmpressed)
+HMM_DB=/home/shaosy/236CuMMOs/hmmscan/Pfam-A.hmm
+
+# High frequency domain reference TSV path
+HIGH_FREQ_TSV=/home/shaosy/264NDB/NCycX/data/reference_domain.tsv
+
+# Number of CPU threads for hmmscan
+HMM_THREADS=10
